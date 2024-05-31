@@ -6,7 +6,7 @@ const char* last8toStr(int x)
 	static int count = 0;
 
 	static int arr[SIZE] = { 0 };
-	static char s[SIZE] = { 0 };
+	static char s[SIZE * 12] = { 0 }; // 10 for max number len + 1 for sign + 1 for space
 
 	if (count < SIZE)
 	{
@@ -18,13 +18,61 @@ const char* last8toStr(int x)
 		arr[SIZE - 1] = x;
 	}
 
+	for (int i = 0; i < SIZE * 12; i++)
+	{
+		s[i] = '\0';
+	}
+
 	int n = 0;
 
 	int max_index = (SIZE > count) ? count : SIZE;
 
-	for (size_t i = 0; i < max_index; i++)
+	for (int i = 0; i < max_index; i++)
 	{
-		n += sprintf(&s[n], "%d ", arr[i]);
+		int number = arr[i];
+		char buff[12] = { 0 };
+		int number_len = 0;
+
+		if (number == 0)
+		{
+			buff[number_len++] = '0';
+		}
+		else
+		{
+			if (number < 0)
+			{
+				buff[number_len++] = '-';
+				number = -number;
+			}
+
+			int temp = number;
+			int digits = 0;
+
+			while (temp > 0)
+			{
+				digits++;
+				temp /= 10;
+			}
+
+			temp = number;
+
+			for (int j = digits - 1; j >= 0; j--)
+			{
+				buff[number_len + j] = '0' + (temp % 10);
+				temp /= 10;
+			}
+			number_len += digits;
+		}
+
+		for (int j = 0; j < number_len; j++)
+		{
+			s[n++] = buff[j];
+		}
+
+		if (i < max_index - 1)
+		{
+			s[n++] = ' ';
+		}
 	}
 
 	return s;
