@@ -14,7 +14,10 @@ const char* last8toStr(int x)
 	}
 	else
 	{
-		memmove(arr, arr + 1, (SIZE - 1) * sizeof(int));
+		for (int i = 1; i < SIZE; i++)
+		{
+			arr[i - 1] = arr[i];
+		}
 		arr[SIZE - 1] = x;
 	}
 
